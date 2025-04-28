@@ -12,28 +12,28 @@ export default function HowItWorks() {
       icon: <Camera className="h-5 w-5" />,
       title: "Analyze Your Food",
       description: "Take a photo of your meal or upload an image for instant AI analysis and nutritional information.",
-      image: "/analyze.jpeg"
+      image: "/analyze.jpg"
     },
     {
       id: "track",
       icon: <BarChart3 className="h-5 w-5" />,
       title: "Track Your Progress",
       description: "Monitor your nutrition intake, calories, and health metrics with detailed interactive charts.",
-      image: "/track.jpeg"
+      image: "/track.jpg"
     },
     {
       id: "recommend",
       icon: <Salad className="h-5 w-5" />,
       title: "Get Recommendations",
       description: "Receive personalized meal suggestions and dietary advice based on your goals and preferences.",
-      image: "/recommend.jpeg"
+      image: "/recommend.jpg"
     },
     {
       id: "achieve",
       icon: <Award className="h-5 w-5" />,
       title: "Achieve Your Goals",
       description: "Stay motivated with personalized insights and celebrate your nutritional and health milestones.",
-      image: "/achieve.jpeg"
+      image: "/achieve.jpg"
     }
   ];
 
