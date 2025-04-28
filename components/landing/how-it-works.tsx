@@ -1,10 +1,9 @@
 "use client";
 
-import { useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Camera, BarChart3, Salad, Award, Calendar } from "lucide-react";
+import { Camera, BarChart3, Salad, Award } from "lucide-react";
 
 export default function HowItWorks() {
   const steps = [
