@@ -10,6 +10,7 @@ import { Slider } from "@/components/ui/slider";
 import { Bookmark, Clock, Filter, Flame, Heart, Info, Leaf, Search, Utensils } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { Input } from "@/components/ui/input";
+import { Calendar } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
