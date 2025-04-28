@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { Camera, Upload, Scan, Info, ChevronDown, Loader2 } from "lucide-react";
+import { Camera, Upload, Info, ChevronDown, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -17,27 +17,27 @@ export default function AnalyzePage() {
   const [analyzing, setAnalyzing] = useState(false);
   const [analyzed, setAnalyzed] = useState(false);
   const [foodImage, setFoodImage] = useState<string | null>(null);
-  
+
   const handleImageCapture = (imageSrc: string) => {
     setFoodImage(imageSrc);
     handleAnalyzeFood();
   };
-  
+
   const handleImageUpload = (imageSrc: string) => {
     setFoodImage(imageSrc);
     handleAnalyzeFood();
   };
-  
+
   const handleAnalyzeFood = () => {
     setAnalyzing(true);
-    
+
     // Simulate AI analysis
     setTimeout(() => {
       setAnalyzing(false);
       setAnalyzed(true);
     }, 2000);
   };
-  
+
   return (
     <div className="container max-w-6xl px-4 py-8 md:py-12">
       <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
@@ -48,7 +48,7 @@ export default function AnalyzePage() {
               Take a photo or upload an image of your food for instant nutritional analysis
             </p>
           </div>
-          
+
           <Card>
             <CardHeader>
               <CardTitle>Image Analysis</CardTitle>
@@ -68,38 +68,38 @@ export default function AnalyzePage() {
                     Upload
                   </TabsTrigger>
                 </TabsList>
-                
+
                 <TabsContent value="camera">
                   <CameraCapture onCapture={handleImageCapture} />
                 </TabsContent>
-                
+
                 <TabsContent value="upload">
                   <ImageUpload onUpload={handleImageUpload} />
                 </TabsContent>
               </Tabs>
             </CardContent>
           </Card>
-          
+
           {foodImage && (
             <Card>
               <CardHeader>
                 <CardTitle>{analyzed ? "Analysis Results" : "Analyzing Food"}</CardTitle>
                 <CardDescription>
-                  {analyzed 
-                    ? "Here's the nutritional breakdown of your food" 
+                  {analyzed
+                    ? "Here's the nutritional breakdown of your food"
                     : "Our AI is analyzing your food image"}
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-6">
                   <div className="relative h-[200px] md:h-[300px] rounded-lg overflow-hidden">
-                    <Image 
+                    <Image
                       src={foodImage}
                       alt="Food image"
                       fill
                       className="object-cover"
                     />
-                    
+
                     {analyzing && (
                       <div className="absolute inset-0 flex items-center justify-center bg-black/50">
                         <div className="text-center space-y-3">
@@ -108,14 +108,14 @@ export default function AnalyzePage() {
                         </div>
                       </div>
                     )}
-                    
+
                     {analyzed && (
                       <div className="absolute top-4 left-4 bg-background/90 backdrop-blur-sm rounded-md px-3 py-1.5 text-sm font-medium">
                         Greek Salad with Grilled Chicken
                       </div>
                     )}
                   </div>
-                  
+
                   {analyzed && (
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
@@ -130,7 +130,7 @@ export default function AnalyzePage() {
             </Card>
           )}
         </div>
-        
+
         <div className="md:col-span-5 space-y-6">
           <Card>
             <CardHeader>
@@ -181,7 +181,7 @@ export default function AnalyzePage() {
               )}
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardHeader>
               <CardTitle>Tips for Accurate Analysis</CardTitle>
