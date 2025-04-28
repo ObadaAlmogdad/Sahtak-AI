@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { Camera, Upload, Info, ChevronDown, Loader2 } from "lucide-react";
@@ -69,13 +70,13 @@ export default function AnalyzePage() {
                   </TabsTrigger>
                 </TabsList>
 
-                <TabsContent value="camera">
+                {/* <TabsContent value="camera">
                   <CameraCapture onCapture={handleImageCapture} />
-                </TabsContent>
+                </TabsContent> */}
 
-                <TabsContent value="upload">
+                {/* <TabsContent value="upload">
                   <ImageUpload onUpload={handleImageUpload} />
-                </TabsContent>
+                </TabsContent> */}
               </Tabs>
             </CardContent>
           </Card>
@@ -122,7 +123,7 @@ export default function AnalyzePage() {
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.5 }}
                     >
-                      <NutritionInfoCard />
+                      {/* <NutritionInfoCard /> */}
                     </motion.div>
                   )}
                 </div>
@@ -170,12 +171,15 @@ export default function AnalyzePage() {
                     Track your food history and nutrition trends over time
                   </p>
                   <div className="space-x-3">
-                    <Button variant="default" asChild>
-                      <a href="/sign-up">Sign Up</a>
+
+                    <Button asChild variant="default">
+                      <Link href="/sign-up">Sign Up</Link>
                     </Button>
-                    <Button variant="outline" asChild>
-                      <a href="/sign-in">Sign In</a>
+                    
+                    <Button asChild variant="default">
+                      <Link href="/sign-in">Sign In</Link>
                     </Button>
+
                   </div>
                 </div>
               )}
