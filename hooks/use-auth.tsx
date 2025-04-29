@@ -2,6 +2,15 @@
 
 import React from "react";
 import { createContext, useContext, useState, useEffect } from "react";
+import { 
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged,
+  User as FirebaseUser,
+  updateProfile
+} from "firebase/auth";
+import { auth } from "@/lib/firebase";
 
 type User = {
   id: string;
@@ -28,45 +37,75 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-    setLoading(false);
+    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+      if (firebaseUser) {
+        setUser({
+          id: firebaseUser.uid,
+          name: firebaseUser.displayName || "",
+          email: firebaseUser.email || "",
+        });
+      } else {
+        setUser(null);
+      }
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
   }, []);
 
   const signIn = async (email: string, password: string) => {
-    const mockUser = {
-      id: "user123",
-      name: "Demo User",
-      email,
-    };
-    
-    setUser(mockUser);
-    localStorage.setItem("user", JSON.stringify(mockUser));
+    console.log('SignIn called with:', email);
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const firebaseUser = userCredential.user;
+      console.log('SignIn success:', firebaseUser);
+      setUser({
+        id: firebaseUser.uid,
+        name: firebaseUser.displayName || "",
+        email: firebaseUser.email || "",
+      });
+    } catch (error) {
+      console.error("Error signing in:", error);
+      throw error;
+    }
   };
 
   const signUp = async (email: string, password: string, name: string) => {
-    const mockUser = {
-      id: "user123",
-      name,
-      email,
-    };
-    
-    setUser(mockUser);
-    localStorage.setItem("user", JSON.stringify(mockUser));
+    console.log('SignUp called with:', email, name);
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const firebaseUser = userCredential.user;
+      console.log('SignUp success:', firebaseUser);
+      // Update user profile with name
+      await updateProfile(firebaseUser, {
+        displayName: name
+      });
+      setUser({
+        id: firebaseUser.uid,
+        name,
+        email: firebaseUser.email || "",
+      });
+    } catch (error) {
+      console.error("Error signing up:", error);
+      throw error;
+    }
   };
 
-  const signOut = () => {
-    setUser(null);
-    localStorage.removeItem("user");
+  const handleSignOut = async () => {
+    try {
+      await signOut(auth);
+      setUser(null);
+    } catch (error) {
+      console.error("Error signing out:", error);
+      throw error;
+    }
   };
 
   const contextValue = {
     user,
     signIn,
     signUp,
-    signOut,
+    signOut: handleSignOut,
   };
 
   return (

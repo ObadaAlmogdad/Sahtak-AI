@@ -10,7 +10,6 @@ import { UtensilsCrossed } from "lucide-react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
   FormControl,
@@ -22,44 +21,36 @@ import {
 import { useAuth } from "@/hooks/use-auth";
 
 const formSchema = z.object({
-  name: z.string().min(2, {
-    message: "Name must be at least 2 characters.",
-  }),
   email: z.string().email({
     message: "Please enter a valid email address.",
   }),
-  password: z.string().min(8, {
-    message: "Password must be at least 8 characters.",
-  }),
-  terms: z.boolean().refine(val => val === true, {
-    message: "You must agree to the terms and conditions.",
+  password: z.string().min(1, {
+    message: "Password is required.",
   }),
 });
 
-export default function SignUpPage() {
+export default function SignInPage() {
   const router = useRouter();
-  const { signUp } = useAuth();
+  const { signIn } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
       email: "",
       password: "",
-      terms: false,
     },
   });
   
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
     try {
-      await signUp(values.email, values.password, values.name);
+      await signIn(values.email, values.password);
       router.push("/dashboard");
     } catch (error) {
-      console.error("Sign up failed:", error);
+      console.error("Sign in failed:", error);
       form.setError("root", { 
-        message: "Sign up failed. Please try again." 
+        message: "Invalid email or password. Please try again." 
       });
     } finally {
       setIsLoading(false);
@@ -91,9 +82,9 @@ export default function SignUpPage() {
             transition={{ duration: 0.5, delay: 0.4 }}
             className="text-center"
           >
-            <h1 className="text-3xl font-bold mb-2">Create an account</h1>
+            <h1 className="text-3xl font-bold mb-2">Welcome back</h1>
             <p className="text-muted-foreground">
-              Sign up to start tracking your nutrition
+              Sign in to continue tracking your nutrition
             </p>
           </motion.div>
         </div>
@@ -106,20 +97,6 @@ export default function SignUpPage() {
         >
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Name</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Enter your name" {...field} className="bg-background" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              
               <FormField
                 control={form.control}
                 name="email"
@@ -141,40 +118,21 @@ export default function SignUpPage() {
                   <FormItem>
                     <FormLabel>Password</FormLabel>
                     <FormControl>
-                      <Input type="password" placeholder="Create a password" {...field} className="bg-background" />
+                      <Input type="password" placeholder="Enter your password" {...field} className="bg-background" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
               
-              <FormField
-                control={form.control}
-                name="terms"
-                render={({ field }) => (
-                  <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                    <FormControl>
-                      <Checkbox 
-                        checked={field.value} 
-                        onCheckedChange={field.onChange} 
-                      />
-                    </FormControl>
-                    <div className="space-y-1 leading-none">
-                      <FormLabel className="text-sm font-normal">
-                        I agree to the{" "}
-                        <Link href="/terms" className="text-primary hover:underline">
-                          terms of service
-                        </Link>{" "}
-                        and{" "}
-                        <Link href="/privacy" className="text-primary hover:underline">
-                          privacy policy
-                        </Link>
-                      </FormLabel>
-                      <FormMessage />
-                    </div>
-                  </FormItem>
-                )}
-              />
+              <div className="flex items-center justify-between">
+                <Link 
+                  href="/forgot-password" 
+                  className="text-sm text-primary hover:underline"
+                >
+                  Forgot password?
+                </Link>
+              </div>
               
               {form.formState.errors.root && (
                 <motion.div 
@@ -191,7 +149,7 @@ export default function SignUpPage() {
                 className="w-full" 
                 disabled={isLoading}
               >
-                {isLoading ? "Creating account..." : "Create account"}
+                {isLoading ? "Signing in..." : "Sign in"}
               </Button>
             </form>
           </Form>
@@ -202,13 +160,13 @@ export default function SignUpPage() {
             transition={{ duration: 0.5, delay: 0.8 }}
             className="text-center text-sm"
           >
-            Already have an account?{" "}
-            <Link href="/sign-in" className="text-primary hover:underline">
-              Sign in
+            Don't have an account?{" "}
+            <Link href="/sign-up" className="text-primary hover:underline">
+              Sign up
             </Link>
           </motion.div>
         </motion.div>
       </motion.div>
     </div>
   );
-}
+} 
